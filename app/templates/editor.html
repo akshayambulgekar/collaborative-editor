@@ -1,0 +1,33 @@
+<!-- app/templates/editor.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Document Editor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js"></script>
+    <script src="{{ url_for('static', filename='js/editor.js') }}"></script>
+</head>
+<body>
+    <header>
+        <h1>Collaborative Editor</h1>
+        <nav>
+            <a href="{{ url_for('doc.versions', doc_id=document.id) }}">Version History</a>
+            <a href="{{ url_for('doc.documents') }}">Documents</a>
+            <a href="{{ url_for('auth.logout') }}">Logout</a>
+        </nav>
+    </header>
+    <h1>{{ document.title }}</h1>
+    <form method="POST" id="editor-form">
+        {{ form.csrf_token }}
+        {{ form.content.label }} {{ form.content(id="editor") }}
+        {{ form.submit }}
+        <span id="save-indicator"></span>
+    </form>
+    <div id="suggestions"></div>
+    <script>
+        const docId = {{ document.id }};
+        const socket = io();
+        socket.emit('join', { doc_id: docId });
+    </script>
+</body>
+</html>

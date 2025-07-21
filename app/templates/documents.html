@@ -1,0 +1,29 @@
+<!-- app/templates/documents.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Documents</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Collaborative Editor</h1>
+        <nav>
+            <a href="{{ url_for('auth.logout') }}">Logout</a>
+        </nav>
+    </header>
+    <h1>My Documents</h1>
+    <form method="POST" action="{{ url_for('doc.create_document') }}">
+        {{ form.csrf_token }}
+        {{ form.title.label }} {{ form.title(placeholder="Document Title") }}
+        {{ form.submit }}
+    </form>
+    <ul class="documents">
+        {% for doc in documents %}
+            <li><a href="{{ url_for('doc.editor', doc_id=doc.id) }}">{{ doc.title }}</a></li>
+        {% else %}
+            <li>No documents yet.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

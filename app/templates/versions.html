@@ -1,0 +1,33 @@
+<!-- app/templates/versions.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Version History</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Collaborative Editor</h1>
+        <nav>
+            <a href="{{ url_for('doc.editor', doc_id=document.id) }}">Editor</a>
+            <a href="{{ url_for('doc.documents') }}">Documents</a>
+            <a href="{{ url_for('auth.logout') }}">Logout</a>
+        </nav>
+    </header>
+    <h1>Version History for {{ document.title }}</h1>
+    <ul class="versions">
+        {% for version in versions %}
+            <li>
+                Version at {{ version.timestamp }}:
+                <form method="POST" action="{{ url_for('doc.restore_version', doc_id=document.id, version_id=version.id) }}">
+                    {{ form.csrf_token }}
+                    {{ form.submit }}
+                </form>
+                <pre>{{ version.content }}</pre>
+            </li>
+        {% else %}
+            <li>No versions available.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

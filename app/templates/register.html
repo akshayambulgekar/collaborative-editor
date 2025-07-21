@@ -1,0 +1,32 @@
+<!-- app/templates/register.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Register</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Collaborative Editor</h1>
+        <nav>
+            <a href="{{ url_for('auth.login') }}">Login</a>
+        </nav>
+    </header>
+    <h1>Register</h1>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class="flash-messages">
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+    <form method="POST">
+        {{ form.csrf_token }}
+        {{ form.email.label }} {{ form.email(placeholder="Email") }}
+        {{ form.password.label }} {{ form.password(placeholder="Password") }}
+        {{ form.submit }}
+    </form>
+</body>
+</html>
