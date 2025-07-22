@@ -31,6 +31,7 @@ def create_app():
 
     from app.routes.auth import auth_bp
     from app.routes.document import doc_bp
+    from app.routes.home import home_bp
     from app.sockets.document_socket import register_socket_handlers
 
     from app.models.user import User  # Import User model
@@ -43,6 +44,7 @@ def create_app():
 
     app.register_blueprint(auth_bp, url_prefix='/auth')
     app.register_blueprint(doc_bp, url_prefix='/doc')
+    app.register_blueprint(home_bp)
     register_socket_handlers(socketio)
 
     with app.app_context():

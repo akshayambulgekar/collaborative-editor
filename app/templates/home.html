@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Collaborative Editor - Home</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f2f5;
+        }
+        .button-container {
+            text-align: center;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 24px;
+            margin: 10px;
+            font-size: 16px;
+            color: white;
+            background-color: #1a73e8;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        .button:hover {
+            background-color: #174ea6;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="button-container">
+        <h1>Welcome to Collaborative Editor</h1>
+        <a href="{{ url_for('auth.login') }}" class="button">Login</a>
+        <a href="{{ url_for('auth.register') }}" class="button">Register</a>
+    </div>
+</body>
+</html>
