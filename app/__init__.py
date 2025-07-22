@@ -1,4 +1,3 @@
-# app/__init__.py
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
@@ -14,8 +13,14 @@ csrf = CSRFProtect()
 def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
+    # Use psycopg directly in the DATABASE_URI
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL').replace('postgresql://', 'postgresql+psycopg://')
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
+        'connect_args': {
+            'options': '-c timezone=UTC'
+        }
+    }
 
     db.init_app(app)
     login_manager.init_app(app)
@@ -23,9 +28,9 @@ def create_app():
     socketio.init_app(app, async_mode='gevent')
     csrf.init_app(app)
 
-    from .routes.auth import auth_bp
-    from .routes.document import doc_bp
-    from .sockets.document_socket import register_socket_handlers
+    from app.routes.auth import auth_bp
+    from app.routes.document import doc_bp
+    from app.sockets.document_socket import register_socket_handlers
 
     app.register_blueprint(auth_bp, url_prefix='/auth')
     app.register_blueprint(doc_bp, url_prefix='/doc')
