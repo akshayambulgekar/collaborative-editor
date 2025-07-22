@@ -3,9 +3,10 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_socketio import SocketIO
 from flask_wtf.csrf import CSRFProtect
+from app.models import db
 import os
 
-db = SQLAlchemy()
+# db = SQLAlchemy()
 login_manager = LoginManager()
 socketio = SocketIO()
 csrf = CSRFProtect()
@@ -31,6 +32,14 @@ def create_app():
     from app.routes.auth import auth_bp
     from app.routes.document import doc_bp
     from app.sockets.document_socket import register_socket_handlers
+
+    from app.models.user import User  # Import User model
+    @login_manager.user_loader
+    def load_user(user_id):
+        return User.query.get(int(user_id))
+
+    socketio.init_app(app, async_mode='gevent')
+    csrf.init_app(app)
 
     app.register_blueprint(auth_bp, url_prefix='/auth')
     app.register_blueprint(doc_bp, url_prefix='/doc')
